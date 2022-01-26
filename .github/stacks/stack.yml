@@ -16,7 +16,7 @@ inputs:                                                  # stack inputs
     - v14.17.4
     
   - name: GITHUB_PAT
-    description: GitHub PAT with repo and workflow permissions
+    description: Enter a GitHub PAT with repository access and read/write permissions for workflows
     required: true
     is-secret: true
 
