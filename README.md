@@ -69,5 +69,4 @@ Learn more about [Github Pages](https://pages.github.com/)
 
 
 ## License
-Unless otherwise noted, this GitHub Stack is distributed under the Apache Version 2.0 license found in the LICENSE file.
-![image](https://user-images.githubusercontent.com/54933897/151190847-66c1734b-8a9e-469a-8b5f-bfa537bb8931.png)
+Unless otherwise noted, this GitHub Stack is distributed under the Apache Version 2.0 license found in [the LICENSE file](./LICENSE).
