@@ -49,4 +49,4 @@ github-apps:
 - slug: greenkeeper
 
 init:
-  uses: "stack-init.yaml"
+  uses: "stack-init.yml"
