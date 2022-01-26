@@ -1,11 +1,11 @@
 version: 0.1.0                                            
 
-name: 'Test stack to Deploy Next.js site to GitHub pages'  # stack name 
-description: 'Description of the test stack'               # stack description
+name: Test stack to Deploy Next.js site to GitHub pages  # stack name 
+description: Description of the test stack               # stack description
 
 branding:                                                # stack branding 
- icon: 'zap'
- color: 'orange'
+ icon: 'package'
+ color: 'black'
 
 inputs:                                                  # stack inputs 
   - name: NODE_VERSION                                   # stack input name
@@ -16,7 +16,7 @@ inputs:                                                  # stack inputs
     - v14.17.4
     
   - name: GITHUB_PAT
-    description: Enter a GitHub PAT that has repository access and read/write access for workflows
+    description: GitHub PAT with repo and workflow permissions
     required: true
     is-secret: true
 
