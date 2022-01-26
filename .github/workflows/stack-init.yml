@@ -1,4 +1,4 @@
-name: "Provision a stack build/deploy for GitHub Pages"
+name: "Provision a stack"
 
 on:
   workflow_dispatch:
