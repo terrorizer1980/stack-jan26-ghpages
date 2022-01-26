@@ -44,9 +44,6 @@ configs:
     - name: development
       parameters:
         protected-branches: true
-        
-github-apps:
-- slug: greenkeeper
 
 init:
   uses: "stack-init.yml"
