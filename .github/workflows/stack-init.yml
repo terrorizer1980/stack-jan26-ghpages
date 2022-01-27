@@ -1,4 +1,4 @@
-name: "Provision a stack"
+name: "Provision the stack to build and deploy to GitHub Pages"
 
 on:
   workflow_dispatch:
@@ -15,49 +15,43 @@ jobs:
        url: ${{ steps.get-url.outputs.your_site }}
 
     steps:
-      - name: 1 - checkout
+      - name: 1 - Checkout the repository
         uses: actions/checkout@v2
         with:
           persist-credentials: false
           
-      - name: 2 - use node.js ${{ github.event.inputs.NODE_VERSION }} 
+      - name: 2 - Setup Node to use the chosen version
         uses: actions/setup-node@v1
         with:
           node-version: ${{ github.event.inputs.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
-          
-      - name: 3 - substitute user inputs in the workflow files
-        uses: microsoft/variable-substitution@v1 
-        with:
-          files: '.github/workflows/build.yml, .github/workflows/deploy.yml'
-        env:
-          env.NODE_VERSION: '${{ github.event.inputs.NODE_VERSION }}'
 
-      - name: 4 - stacks framework code generation
+      - name: 3 - Generate framework code for a new Next.js application
         run: |
           npx create-next-app nextjs-scaffold --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"
           cp -r nextjs-scaffold/* .
           rm -rf nextjs-scaffold
+          echo ${{ github.event.inputs.NODE_VERSION }} > .nmvrc
           
-      - name: 5 - Configure git
+      - name: 4 - Configure Git so that we can commit code to the repsitory
         run: |
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           
-      - name: 6 - Commit generated code and initialize workflows
+      - name: 5 - Commit the generated code and initialize the workflows
         run: |
           git add .
-          git commit -m "Generate framework code and initialize workflows"
+          git commit -m "Commit framework code and initialize workflows"
           git push origin -u main
 
-      - name: 7 - build
+      - name: 6 - Build the application
         run: |
-          npm install -g
+          npm install
           npm run build 
           npm run env -- next export -o build
           
-      - name: 8 - deploy
+      - name: 7 - Deploy the application to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,11 +59,11 @@ jobs:
           FOLDER: build
           CLEAN: true
      
-      - name: 9 - Enable GitHub Pages
+      - name: 8 - Create the GitHub Pages site
         uses: actions/github-script@v4
-        continue-on-error: true # API fails when the GitHub pages is already deployed
+        continue-on-error: true # API fails when the GitHub Pages is already deployed
         with:
-          github-token: ${{ secrets.GH_PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.repos.createPagesSite({
               owner: context.repo.owner,
@@ -80,12 +74,12 @@ jobs:
               }
             })
         
-      - name: 10 - Website URL
+      - name: 9 - Print the URL of the website for the user's use
         run: |
           echo "Website URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           
-      - name: 11 - Wait for website to come online
-        timeout-minutes: 5 
+      - name: Allow 10 minutes for the website to become available
+        timeout-minutes: 10 
         id: get-url
         run: |
           echo "Waiting for the website to come alive..."
