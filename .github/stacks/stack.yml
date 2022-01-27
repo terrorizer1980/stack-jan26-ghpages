@@ -1,6 +1,6 @@
 version: 0.1.0                                            
 
-name: Deploy a Next.js site to GitHub pages  
+name: Deploy a Next.js site to GitHub pages - hubwriter version 
 description: A stack to deploy a nextjs based website to Github Pages               
 
 branding:                                                # stack branding 
